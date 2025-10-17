@@ -16,9 +16,10 @@ export class Service{
 
     async createPost({title, slug, content, featuredImage, status, userID}) { 
         try {
-            return await this.databases.createDocument(
+            return await this.databases.createRow(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
+                ID.unique(),
                 slug,
                 {
                     title,
@@ -35,7 +36,7 @@ export class Service{
 
     async updatePost(slug, {title, content, featuredImage, status}) {
         try {
-            return await this.databases.updateDocument(
+            return await this.databases.updateRow(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
@@ -53,7 +54,7 @@ export class Service{
 
     async deletePost(slug) {
         try {
-            await this.databases.deleteDocument(
+            await this.databases.deleteRow(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
@@ -67,7 +68,7 @@ export class Service{
 
     async getPost(slug) {
         try {
-            return await this.databases.getDocument(
+            return await this.databases.getRow(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
@@ -79,7 +80,7 @@ export class Service{
 
     async getPosts(queries = [Query.equal("status", "active")]) {
         try {
-            return await this.databases.listDocuments(
+            return await this.databases.listRows(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 queries,
@@ -106,7 +107,7 @@ export class Service{
 
     async deleteFile(fileId) {
         try {
-            await this.bucket.createFile(
+            await this.bucket.deleteFile(
                 conf.appwriteBucketId,
                 fileId
             )
